@@ -16,7 +16,7 @@
 ## Estado atual verificado
 
 - A Fase 0 foi implementada: workspace pnpm, esqueletos de `apps/api`, `apps/web` e `packages/contracts`, TypeScript estrito, ESLint, Prettier, Husky, README, `.env.example`, `firebase.json` e `firestore.rules`.
-- O repositório Git possui remote `origin` para `github.com/davi1985/shortlink.git` e o commit inicial `8d9b778` com a documentação. As alterações da Fase 0 permanecem no working tree até revisão.
+- O repositório Git possui remote `origin` para `github.com/davi1985/shortlink.git` e o commit inicial `8d9b778` com a documentação. A Fase 0 foi registrada em commits atômicos sobre esse commit, e o working tree está limpo.
 - A plataforma de CI definida é **GitHub Actions**.
 - Ambiente local disponível: Node `v24.19.0`, pnpm `10.1.0`, npm `11.17.0`, Java `21.0.7`.
 - O PRD foi ajustado para usar **Vitest** no backend e no frontend. Não restam referências a Jest.
