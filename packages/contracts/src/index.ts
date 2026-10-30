@@ -5,7 +5,6 @@ export const SHORT_LINK_LIMITS = {
   MAX_EXPIRATION_HOURS: 24,
   MAX_URL_LENGTH: 2048,
   MAX_BODY_SIZE_BYTES: 16 * 1024,
-  MAX_GENERATION_ATTEMPTS: 5,
   SHORT_CODE_LENGTH: 7,
   MIN_ALIAS_LENGTH: 3,
   MAX_ALIAS_LENGTH: 32,
@@ -64,8 +63,14 @@ const httpUrlSchema = z
 export const customAliasSchema = z
   .string()
   .trim()
-  .min(SHORT_LINK_LIMITS.MIN_ALIAS_LENGTH, `Alias must have at least ${SHORT_LINK_LIMITS.MIN_ALIAS_LENGTH} characters.`)
-  .max(SHORT_LINK_LIMITS.MAX_ALIAS_LENGTH, `Alias must have at most ${SHORT_LINK_LIMITS.MAX_ALIAS_LENGTH} characters.`)
+  .min(
+    SHORT_LINK_LIMITS.MIN_ALIAS_LENGTH,
+    `Alias must have at least ${SHORT_LINK_LIMITS.MIN_ALIAS_LENGTH} characters.`,
+  )
+  .max(
+    SHORT_LINK_LIMITS.MAX_ALIAS_LENGTH,
+    `Alias must have at most ${SHORT_LINK_LIMITS.MAX_ALIAS_LENGTH} characters.`,
+  )
   .regex(aliasPattern, 'Alias may contain only letters, numbers, hyphens and underscores.')
   .refine((value) => !isReservedAlias(value), 'Alias is reserved and cannot be used.');
 
