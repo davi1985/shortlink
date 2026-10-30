@@ -1,15 +1,28 @@
 import { z } from 'zod';
 
-export const DEFAULT_EXPIRATION_HOURS = 24;
-export const MAX_EXPIRATION_HOURS = 24;
-export const MAX_URL_LENGTH = 2048;
-export const MAX_BODY_SIZE_BYTES = 16 * 1024;
-export const MAX_GENERATION_ATTEMPTS = 5;
-export const SHORT_CODE_LENGTH = 7;
-export const MIN_ALIAS_LENGTH = 3;
-export const MAX_ALIAS_LENGTH = 32;
-export const RATE_LIMIT_MAX = 10;
-export const RATE_LIMIT_WINDOW_MS = 60_000;
+export const shortLinkLimits = {
+  defaultExpirationHours: 24,
+  maxExpirationHours: 24,
+  maxUrlLength: 2048,
+  maxBodySizeBytes: 16 * 1024,
+  maxGenerationAttempts: 5,
+  shortCodeLength: 7,
+  minAliasLength: 3,
+  maxAliasLength: 32,
+  rateLimitMax: 10,
+  rateLimitWindowMs: 60_000,
+} as const;
+
+export const DEFAULT_EXPIRATION_HOURS = shortLinkLimits.defaultExpirationHours;
+export const MAX_EXPIRATION_HOURS = shortLinkLimits.maxExpirationHours;
+export const MAX_URL_LENGTH = shortLinkLimits.maxUrlLength;
+export const MAX_BODY_SIZE_BYTES = shortLinkLimits.maxBodySizeBytes;
+export const MAX_GENERATION_ATTEMPTS = shortLinkLimits.maxGenerationAttempts;
+export const SHORT_CODE_LENGTH = shortLinkLimits.shortCodeLength;
+export const MIN_ALIAS_LENGTH = shortLinkLimits.minAliasLength;
+export const MAX_ALIAS_LENGTH = shortLinkLimits.maxAliasLength;
+export const RATE_LIMIT_MAX = shortLinkLimits.rateLimitMax;
+export const RATE_LIMIT_WINDOW_MS = shortLinkLimits.rateLimitWindowMs;
 
 export const RESERVED_ALIASES = [
   'api',
