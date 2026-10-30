@@ -1,28 +1,17 @@
 import { z } from 'zod';
 
-export const shortLinkLimits = {
-  defaultExpirationHours: 24,
-  maxExpirationHours: 24,
-  maxUrlLength: 2048,
-  maxBodySizeBytes: 16 * 1024,
-  maxGenerationAttempts: 5,
-  shortCodeLength: 7,
-  minAliasLength: 3,
-  maxAliasLength: 32,
-  rateLimitMax: 10,
-  rateLimitWindowMs: 60_000,
+export const SHORT_LINK_LIMITS = {
+  DEFAULT_EXPIRATION_HOURS: 24,
+  MAX_EXPIRATION_HOURS: 24,
+  MAX_URL_LENGTH: 2048,
+  MAX_BODY_SIZE_BYTES: 16 * 1024,
+  MAX_GENERATION_ATTEMPTS: 5,
+  SHORT_CODE_LENGTH: 7,
+  MIN_ALIAS_LENGTH: 3,
+  MAX_ALIAS_LENGTH: 32,
+  RATE_LIMIT_MAX: 10,
+  RATE_LIMIT_WINDOW_MS: 60_000,
 } as const;
-
-export const DEFAULT_EXPIRATION_HOURS = shortLinkLimits.defaultExpirationHours;
-export const MAX_EXPIRATION_HOURS = shortLinkLimits.maxExpirationHours;
-export const MAX_URL_LENGTH = shortLinkLimits.maxUrlLength;
-export const MAX_BODY_SIZE_BYTES = shortLinkLimits.maxBodySizeBytes;
-export const MAX_GENERATION_ATTEMPTS = shortLinkLimits.maxGenerationAttempts;
-export const SHORT_CODE_LENGTH = shortLinkLimits.shortCodeLength;
-export const MIN_ALIAS_LENGTH = shortLinkLimits.minAliasLength;
-export const MAX_ALIAS_LENGTH = shortLinkLimits.maxAliasLength;
-export const RATE_LIMIT_MAX = shortLinkLimits.rateLimitMax;
-export const RATE_LIMIT_WINDOW_MS = shortLinkLimits.rateLimitWindowMs;
 
 export const RESERVED_ALIASES = [
   'api',
@@ -54,7 +43,7 @@ const httpUrlSchema = z
   .string()
   .trim()
   .min(1, 'URL is required.')
-  .max(MAX_URL_LENGTH, 'URL exceeds the allowed length.')
+  .max(SHORT_LINK_LIMITS.MAX_URL_LENGTH, 'URL exceeds the allowed length.')
   .refine((value) => {
     try {
       const parsed = new URL(value);
@@ -75,8 +64,8 @@ const httpUrlSchema = z
 export const customAliasSchema = z
   .string()
   .trim()
-  .min(MIN_ALIAS_LENGTH, `Alias must have at least ${MIN_ALIAS_LENGTH} characters.`)
-  .max(MAX_ALIAS_LENGTH, `Alias must have at most ${MAX_ALIAS_LENGTH} characters.`)
+  .min(SHORT_LINK_LIMITS.MIN_ALIAS_LENGTH, `Alias must have at least ${SHORT_LINK_LIMITS.MIN_ALIAS_LENGTH} characters.`)
+  .max(SHORT_LINK_LIMITS.MAX_ALIAS_LENGTH, `Alias must have at most ${SHORT_LINK_LIMITS.MAX_ALIAS_LENGTH} characters.`)
   .regex(aliasPattern, 'Alias may contain only letters, numbers, hyphens and underscores.')
   .refine((value) => !isReservedAlias(value), 'Alias is reserved and cannot be used.');
 
