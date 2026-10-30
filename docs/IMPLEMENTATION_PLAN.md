@@ -15,11 +15,12 @@
 
 ## Estado atual verificado
 
-- O repositório contém `AGENTS.md`, `docs/PRD.md`, `docs/IMPLEMENTATION_PLAN.md` e `.gitignore`; ainda não há código, `package.json`, workspace pnpm ou apps/packages.
-- O repositório Git foi inicializado com remote `origin` para `github.com/davi1985/shortlink.git`, sem commits até o momento.
+- A Fase 0 foi implementada: workspace pnpm, esqueletos de `apps/api`, `apps/web` e `packages/contracts`, TypeScript estrito, ESLint, Prettier, Husky, README, `.env.example`, `firebase.json` e `firestore.rules`.
+- O repositório Git possui remote `origin` para `github.com/davi1985/shortlink.git` e o commit inicial `8d9b778` com a documentação. As alterações da Fase 0 permanecem no working tree até revisão.
 - A plataforma de CI definida é **GitHub Actions**.
-- Ambiente local disponível: Node `v24.19.0`, pnpm `10.1.0`, npm `11.17.0`.
+- Ambiente local disponível: Node `v24.19.0`, pnpm `10.1.0`, npm `11.17.0`, Java `21.0.7`.
 - O PRD foi ajustado para usar **Vitest** no backend e no frontend. Não restam referências a Jest.
+- Não há regras de negócio, testes de negócio, backend executável nem frontend funcional nesta etapa.
 
 ---
 
@@ -1109,10 +1110,14 @@ O pipeline deve falhar em qualquer etapa obrigatória. Não reduzir cobertura de
 | P18 | Comportamento de "nova criação" | Limpar formulário e ocultar resultado ao iniciar nova criação | Decisão de UX não detalhada no PRD |
 | P19 | Testes de integração com emulador | Tornar o Firestore Emulator obrigatório para integração e E2E | O PRD diz "preferencialmente"; tornar obrigatório aumenta isolamento |
 | P20 | Previews da Vercel e CORS | Permitir apenas origens configuradas; previews exigem configuração explícita | CORS restritivo pode bloquear previews |
-| P21 | Comando executado pelo hook `pre-commit` | Executar `pnpm lint && pnpm typecheck`; avaliar `lint-staged` apenas se o tempo se tornar um problema | Impacta o tempo de commit e pode exigir dependência extra |
 
-> **P13 aprovado:** PRD movido para `docs/PRD.md`; referências do `AGENTS.md` atualizadas.  
+> **P13 aprovado:** PRD movido para `docs/PRD.md`; referências do `AGENTS.md` atualizadas.
+>
 > **P14 aprovado:** CI será executado no GitHub Actions. A numeração foi mantida para preservar referências às demais decisões.
+>
+> **P15 parcialmente aprovado na Fase 0:** Node 24, pnpm 10.1.0, TypeScript 6.0.3, ESLint 10, Prettier 3, Husky 9 e `@types/node` 24 foram fixados. Tailwind e demais dependências serão fixadas nas fases correspondentes.
+>
+> **P21 aprovado na Fase 0:** o hook executa `pnpm lint && pnpm typecheck`.
 
 ## 10.2 Riscos técnicos
 
@@ -1142,6 +1147,8 @@ O pipeline deve falhar em qualquer etapa obrigatória. Não reduzir cobertura de
 - CI será executado no **GitHub Actions**.
 - O PRD está em `docs/PRD.md`; o `AGENTS.md` foi atualizado e não há duplicação.
 - **Husky** será usado para validação de pre-commit.
+- O hook `pre-commit` executa `pnpm lint && pnpm typecheck` (P21).
+- Fase 0 fixou Node 24, pnpm 10.1.0, TypeScript 6.0.3, ESLint 10, Prettier 3, Husky 9 e `@types/node` 24.
 - Firestore será acessado apenas pelo backend.
 - Redis, filas e microsserviços ficam fora do MVP.
 
@@ -1186,7 +1193,7 @@ Ao concluir uma fase:
 
 ## Fases
 
-- [ ] Fase 0 — Fundação do monorepo e tooling
+- [x] Fase 0 — Fundação do monorepo e tooling
 - [ ] Fase 1 — Pacote `contracts`
 - [ ] Fase 2 — Bootstrap do backend e infraestrutura transversal
 - [ ] Fase 3 — Domínio de URLs e persistência Firestore
@@ -1204,9 +1211,32 @@ Ao concluir uma fase:
 | 2026-10-30 | Backend e frontend usam Vitest | Ajuste aplicado em `docs/PRD.md` e `AGENTS.md` |
 | 2026-10-30 | CI no GitHub Actions | Definido pelo solicitante; plano atualizado |
 | 2026-10-30 | PRD movido para `docs/PRD.md` | Referências do `AGENTS.md` atualizadas |
-| 2026-10-30 | Husky para validação de pre-commit | Definido pelo solicitante; comando do hook pendente (P21) |
+| 2026-10-30 | Husky para validação de pre-commit | Definido pelo solicitante; hook configurado na Fase 0 |
+| 2026-10-30 | Fase 0 concluída | Workspace pnpm, tooling, configuração do Firestore e Husky implementados e verificados |
+| 2026-10-30 | Node 24 e pnpm 10.1.0 fixados | `package.json` e `pnpm-lock.yaml` |
+| 2026-10-30 | TypeScript 6.0.3 e toolchain de lint | TypeScript 7 não é compatível com `typescript-eslint` 8.72 |
+| 2026-10-30 | Hook `pre-commit` executa `pnpm lint && pnpm typecheck` (P21) | `.husky/pre-commit` |
+| 2026-10-30 | Build da Fase 0 via `tsc` | `contracts` usa build ESM provisório; build dual permanece para a Fase 1 (P8) |
+| 2026-10-30 | API em CommonJS e web em ESM no esqueleto | `apps/api/package.json` e `apps/web/package.json`; decisão final de P8 na Fase 1 |
+| 2026-10-30 | Prettier ignora `docs/` e `AGENTS.md` | Evita reformatação de documentos aprovados |
+| 2026-10-30 | Firestore nega leitura e escrita de clientes | `firestore.rules` |
 | — | Demais decisões deste plano | Aguardando aprovação |
+
+## Evidências da Fase 0
+
+| Verificação | Resultado |
+| --- | --- |
+| `pnpm install --frozen-lockfile` | Passou; lockfile consistente |
+| Clone limpo simulado | Passou; instalação, lint, formatação, typecheck e build sem `node_modules` ou `dist` prévios |
+| `pnpm lint` | Passou sem erros |
+| `pnpm format:check` | Passou |
+| `pnpm typecheck` | Passou nos três pacotes |
+| `pnpm build` | Passou em `contracts`, `api` e `web`, nesta ordem |
+| `pnpm test` | Passou; não há testes de negócio nesta fase, conforme o plano |
+| Hook `pre-commit` com erro proposital | Bloqueou o commit |
+| Hook `pre-commit` sem erro | Passou |
+| Credenciais versionadas | Nenhuma |
 
 ## Próxima ação
 
-Aguardar aprovação do plano e das decisões pendentes da seção 10.1 antes de iniciar a Fase 0.
+Aguardar revisão da Fase 0 e orientação para iniciar a Fase 1 — Pacote `contracts`.
